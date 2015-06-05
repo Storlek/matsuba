@@ -1,0 +1,28 @@
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">threadpage</%def>
+<%def name="pagetitle()">${thread.subject}</%def>
+
+[<a href="${url(board=board)|upath,h}">Return</a>]
+<div class="theader">Posting Mode: Reply</div>
+${postform(board, thread)}
+
+
+<form id="delform" action="${MATSUBA_PATH|upath,h}" method="post">
+<input type="hidden" name="board" value="${board.name}" />
+
+% for post in thread:
+        ${singlepost(post, True)}
+% endfor
+
+<br style="clear: left" /><hr />
+
+<table class="userdelete"><tbody><tr><td>
+% if board.all_filetypes():
+[<label><input type="checkbox" name="fileonly" />File Only</label>]
+% endif
+<input value="Delete" type="submit" /></td></tr></tbody></table>
+</form>
+
+<br clear="all" />

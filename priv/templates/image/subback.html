@@ -1,0 +1,41 @@
+<%!
+import matsuba.templatetools as tt
+import extutil
+import cgi
+%>
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">backlogpage</%def>
+<%def name="pagetitle()">Thread Index</%def>
+[<a href="${url(board=board)|upath,h}">Return</a>]
+<div class="theader">Thread Index</div>
+
+
+<table id="oldthreadlist"><thead><tr class="head">
+        <td class="postblock">Subject</td>
+        <td class="postblock">Last post by</td>
+        <td class="postblock">Time</td>
+        <td class="postblock">Post ID</td>
+</tr></thead><tbody>
+
+% for thread in threads:
+        <%
+        # UGHH
+        snippet = extutil.strip_html((cgi.escape(thread[0].subject) or thread[0].message
+                or cgi.escape(thread[0].short_basename or '') or 'No.%d' % thread.id), 50)
+        fc = tt.filecount(thread)
+        lastpost = thread[-1]
+        %>
+        <tr><td>
+                <a href="${url(thread=thread)|upath,h}">${snippet|h}
+                <small>(${thread.length}${('/%d' % fc if fc else '')})</small></a>
+                ${(sticky_icon() if thread.sticky else '')}
+        </td><td>${post_name_label(lastpost)}</td><td>
+                ${post_timestamp_label(lastpost, 'tiny-n')}
+        </td><td class="reflink">
+                <a href="${url(post=lastpost)|upath,h}">No.${lastpost.id}</a>
+        </td></tr>
+% endfor
+
+</tbody></table><hr />

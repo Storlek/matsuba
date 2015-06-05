@@ -1,0 +1,229 @@
+html, body {
+        background-color:#333333;
+        background-position:top;
+        background-repeat:repeat-x;
+        color:#EEEEEE;
+        font-family: "Trebuchet MS", Tahoma, Verdana, Arial, sans-serif;
+        font-size:10pt;
+
+}
+
+a {
+        color:#FF6600;
+        text-decoration: none;
+}
+a:link {
+}
+a:visited {
+}
+a:active {
+}
+a:hover {
+        text-decoration: none;
+        color: #0066FF;
+}
+
+p {
+        text-align:left;
+        margin-top:2px;
+        margin-bottom: 10px;
+        padding: 2px;
+        list-style: none;
+}
+
+h1 {
+        color: #444444;
+        font-family:"Times New Roman", Helvetica, Arial;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 50px;
+        margin: 0px;
+        margin-bottom: 0px;
+}
+
+h2 {
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        text-align:center;
+        font-style:italic;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px 0px 0px 4px;
+}
+
+h3 {
+        font-size: small;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color: #444444;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        text-align: left;
+        padding: 0px 0px 0px 4px;
+        border-style:solid;
+        border-color: #C4C4C4;
+        border-width: 1px 1px 1px 1px;
+}
+
+h4 {
+        font-size: x-small;
+        text-align: left;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color:#444444;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px 0px 0px 4px;
+        border: 1px solid #C4C4C4;
+}
+
+hr {
+        border: none;
+        border-top: 1px solid #C4C4C4;
+        height: 0px;
+}
+
+ul {
+        text-align:left;
+        list-style:disc;
+}
+
+li {
+        margin: 0px;
+        padding: 0px 0px 0px 2px;
+        line-height: 1.2em;
+}
+
+
+.logo {
+        clear:both;
+        text-align:center;
+        font-size:24pt;
+        color:#FF6600;
+        width:100%;
+}
+
+input, textarea {
+        background-color: #444444;
+        color:#000000;
+        border: 1px solid #000000;
+}
+
+.postblock {
+        margin: 0;
+        background-color: #444444;
+        color:#000000;
+        border: 1px solid #000000;
+        font-weight: bold;
+        padding: 2px 5px 2px 5px;
+        width:55px;
+}
+
+.unkfunc {
+        background:inherit;
+        color:#789922;
+}
+.filesize {
+        text-decoration:none;
+}
+.filetitle {
+        background:inherit;
+        color:#DD0000;
+        font-weight:800;
+}
+.postername {
+        background:inherit;
+        font-size:11pt;
+        color:#0066FF;
+        font-weight: bold;
+}
+.postertrip {
+        background:inherit;
+        color:#0066FF;
+}
+.oldpost {
+        background:inherit;
+        color:#0066FF;
+        font-weight:800;
+}
+.omittedposts {
+        background:inherit;
+        color:#444;
+}
+.reply {
+        background-color: #444444;
+        color:#EEEEEE;
+        border-style:solid;
+        border-color: #4F4F4F;
+        border-width: 0px 1px 1px 0px;
+}
+.replyhl {
+        background-color: #444444;
+        color:#EEEEEE;
+}
+.highlight {
+        background-color:#444444;
+        color:#EEEEEE;
+        border: 1px dashed #000000;
+}
+.doubledash {
+        vertical-align:top;
+        clear:both;
+        float:left;
+}
+.replytitle {
+        background:inherit;
+        font-size:18px;
+        color:#0066FF;
+        font-weight:800;
+}
+.commentpostername {
+        background:inherit;
+        font-size:11pt;
+        color:#0066FF;
+        font-weight: bold;
+}
+a.quotejs {
+        color:#EEEEEE;
+        text-decoration: none;
+}
+a.quotejs:hover {
+        font-weight:bold;
+}
+
+.title {
+        font-size: small;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color: #E7D2B6;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        text-align: left;
+        padding: 0px 0px 0px 4px;
+        border-style:solid;
+        border-color: #8F1A25;
+        border-width: 1px 1px 1px 1px;
+}
+
+.content {
+        text-align:left;
+        margin-top:2px;
+        margin-bottom: 10px;
+        padding: 2px;
+        list-style: none;
+        background-color: #EFE2D1;
+        border: 1px solid #8F1A25;
+}
+
+.top {
+        font-size:20px;
+        font-family:"Times New Roman", Helvetica, Arial;
+        font-weight:normal;
+        text-align:center;
+        width:75%;
+        position:absolute;
+        top:0px;
+        left:205px;
+        margin-top:5px;
+}

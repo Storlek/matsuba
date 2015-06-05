@@ -1,0 +1,34 @@
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="pagetitle()">${thread.subject}</%def>
+<%def name="bodyclass()">threadpage</%def>
+
+## <!--ThreadHeadTemplate-->
+<div id="navigation">
+<strong>Navigation:</strong>
+<a href="${url(board=board)|upath,h}">Return</a>
+<a href="${url(thread=thread, postrange='')|upath,h}">Entire thread</a>
+<a href="${url(thread=thread, postrange='-100')|upath,h}" rel="nofollow">First 100 posts</a>
+% for r in xrange(100, thread.length, 100):
+<a href="${url(thread=thread, postrange='%d-%d' % (r + 1, min(r + 100, thread.length)))|upath,h}" rel="nofollow">${r + 1}-</a>
+% endfor
+<a href="${url(thread=thread, postrange='l50')|upath,h}" rel="nofollow">Last 50 posts</a>
+</div>
+
+<div id="posts">
+<div class="${('sage' if thread.sage else '')}thread">
+<h2>${thread.subject|h} <small>(${thread.length}${(', sticky' if thread.sticky else '')}${(', permasaged' if thread.sage and not thread.sticky else '')}${(', closed' if thread.closed else '')})</small></h2>
+<div class="replies"><div class="allreplies">
+## <!--/ThreadHeadTemplate-->
+
+% for post in thread:
+<a name="${post.resid}"></a>
+${singlepost(post, True)}
+% endfor
+
+## <!--ThreadFootTemplate-->
+</div></div>
+${postform(board, thread)}
+</div></div>
+## <!--/ThreadFootTemplate-->

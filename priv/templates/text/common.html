@@ -1,0 +1,159 @@
+## defs provided:
+##     singlepost(post, threadpage) - one post
+##     rules(board, thread=None) - the rules underneath the posting form (used internally here)
+##     postform(board, thread=None) - the posting form
+## internal:
+##     post_name_label(post) - outputs a name (and link, if one is defined)
+##     post_timestamp_label(post, dateformat=None) - timestamp, with link if one is defined and no name is set.
+##         dateformat is passed to format_timestamp
+##     post_label(post, dateformat=None) - post subject, name, timestamp, and poster ID
+##     sticky_icon() - <img/> for a sticky icon
+##     post_message(post, threadpage=True) - message text of a post. if threadpage is False, long messages are
+##         abbreviated with a note to that effect.
+
+<%!
+import matsuba.templatetools as tt
+import extutil
+##>
+
+# True = index.html, 1.html, 2.html, etc.
+# False = only index.html
+THREADLIST_MULTIPAGE = False
+
+# True = Wakaba style:
+#     Posts increment globally
+#     Threads served via /board/res/threadid.html
+#     Post id references link to #postid on the thread page
+# False = Kareha style:
+#     Each thread has a post #1
+#     Threads are served via /board/read/postrange
+#     Post id references link to a single-post view
+#     Multiple-post ranges are supported in post references
+#     (Side effect note: posts are never deleted from the board in this style)
+#     This requires some mod_rewrite magic to work.
+POSTIDS_ABSOLUTE = False
+
+# True = a subject is required when posting a new thread
+# False = subject can be blank
+REQUIRE_SUBJECT = True
+
+# Other pages to generate (catalog, subback, ...)
+OTHER_PAGES = [('rssreplies', 'rss.xml'), ('subback', 'subback.html')]
+
+## -------------------------------------------------------------------------------------------------------------
+## Single post.
+## vars:
+##     post = Post object
+##     threadpage = boolean. Affects post abbreviation etc.
+
+## Just the name
+<%def name="post_name_label(post)">
+${tt.format_name_trip(post.name_trip, ['<span class="postername">', '</span>'], ['<span class="postertrip">', '</span>'], post.link)}
+</%def>
+
+## Just the timestamp
+<%def name="post_timestamp_label(post, dateformat=None)">
+% if post.link and not filter(None, post.name_trip):
+<a href="${post.link|upath,h}">${tt.timestamp(post, dateformat)}</a>
+% else:
+${tt.timestamp(post, dateformat)}
+% endif
+</%def>
+
+<%def name="singlepost(post, threadpage)"><%
+if threadpage:
+        abbrev = None
+else:
+        abbrev = extutil.abbreviate_html(post.message)
+%>
+% if post.aborn:
+##<!--DeletedTemplate-->
+<div class="deletedreply"><h3><span class="replynum">${post.resid}</span> ${post.message}</h3></div>
+##<!--/DeletedTemplate-->
+% else:
+##<!--ReplyTemplate-->
+<div class="reply">
+<h3 title="${extutil.strip_html(post.message, 50)|h}">
+<span class="replynum"><a title="Quote post number in reply" href="${url(post=post, quote=True)}">${post.resid}</a></span>
+Name: ${post_name_label(post)} : ${post_timestamp_label(post, '2ch')}
+% if post.idcode:
+<span class="idcode">ID:${post.idcode|h}</span>
+% endif
+% if post.filename:
+<span class="filesize">(File: <em>${post.fileinfo|h}</em>)</span>
+% endif
+## should write this with javascript... meh
+<span class="deletebutton">[<a href="javascript:delete_post('${board.name}',${post.id})">Del</a>]</span>
+</h3>
+% if post.thumbnail:
+        % if post.filename:
+        <a href="${url(board=board, src=post.filename)|upath,h}">
+        % endif
+        <img src="${url(board=board, thumb=post.thumbnail)|upath,h}" width="${post.tn_width}" height="${post.tn_height}"
+                class="thumb" alt="${post.sizeinfo}" title="${post.sizeinfo}" />
+        % if post.filename:
+        </a>
+        % endif
+% endif
+<div class="replytext">${abbrev or post.message}</div>
+% if abbrev:
+<div class="replyabbrev">Post too long. Click to view the
+<a href="${url(post=post)|upath,h}" rel="nofollow">whole post</a>
+or the <a href="${url(thread=post.thread)|upath,h}" rel="nofollow">thread page</a>.</div>
+% endif
+</div>
+##<!--/ReplyTemplate-->
+% endif
+</%def>
+
+## -------------------------------------------------------------------------------------------------------------
+## Posting form.
+## vars:
+##     board = Board object
+##     thread = Thread object (if applicable)
+## if wrapped inside a call block, the caller may define a 'links' def to append to the bottom of the form.
+
+<%def name="postform(board, thread=None)">
+<form id="form${(thread.id if thread else 0)}" action="${MATSUBA_PATH}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="board" value="${board.name}" />
+<input type="hidden" name="threadid" value="${(thread.id if thread else 0)}" />
+<table><tbody>
+% if thread and thread.closed:
+        <tr><td></td><td><big>This thread has been closed. You cannot post in this thread any longer.</big></td></tr>
+% else:
+        % if not thread:
+        <tr><td>Title:</td><td>
+                <input type="text" name="field3" size="46" />
+                <input type="submit" value="Create new thread" />
+        </td></tr>
+        % endif
+
+        <tr><td>${('Link' if board.forced_anon else 'Name')}:</td><td>
+        % if board.forced_anon:
+        <input type="hidden" name="field1" />
+        % else:
+        <input type="text" name="field1" size="19" maxlength="${MAX_FIELD_LENGTH}" /> Link:
+        % endif
+        <input type="text" name="field2" size="19" maxlength="${MAX_FIELD_LENGTH}" />
+        % if thread:
+        <input type="submit" value="Reply" />
+        % endif
+        <div class="trap">Spam trap (don't touch):
+                <input type="text" name="name" size="19" autocomplete="off" />
+                <input type="text" name="link" size="19" autocomplete="off" value="'" />
+        </div>
+        ## <small><a href="#">More options...</a></small>
+        </td></tr>
+
+        ## default size is 10, javascript rewrites this to 5, and 15 when focused
+        <tr><td></td><td><textarea name="field4" cols="64" rows="10"></textarea></td></tr>
+
+        % if board.all_filetypes(thread is not None):
+        <tr><td>File:</td><td><input type="file" name="upload" size="49" /></td></tr>
+        % endif
+% endif
+% if caller and hasattr(caller, 'links'):
+        <tr><td></td><td>${caller.links()}</td></tr>
+% endif
+</tbody></table></form>
+</%def>

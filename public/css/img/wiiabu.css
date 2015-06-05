@@ -1,0 +1,143 @@
+html, body {
+        font: 11pt "optima", sans-serif;
+        background: white;
+        color: black;
+}
+a {
+        color: #5888a8;
+}
+a:visited {
+        color: #574a7e;
+}
+a[href^="#"] {
+        color: #9f1c43;
+}
+a:hover {
+        color: #fda52c;
+}
+
+.boardbar {
+        text-align: left;
+        float: left;
+}
+.adminbar {
+        text-align: right;
+        float: right;
+        display: block;
+}
+.logo {
+        clear: both;
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        color: black;
+        width: 100%;
+}
+.theader {
+        background: #ededeb;
+        color: black;
+        font-weight: bold;
+        text-align: center;
+        padding: 2px;
+        width: 100%;
+        border-radius: 0.25em;
+        -moz-border-radius: 0.25em;
+        border: 1px solid #84cdfd;
+}
+.rules {
+        font-size: 0.85em;
+}
+hr {
+        height: 1px;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: #84cdfd;
+}
+textarea, input {
+        background-color: #ededeb;
+        color: black;
+        border-width: 1px;
+        border-radius: 0.25em;
+        -moz-border-radius: 0.25em;
+}
+.reply {
+        background-color: #ededeb;
+        color: black;
+        border-width: 1px;
+        border-radius: 0.5em;
+        -moz-border-radius: 0.5em;
+}
+input[type="submit"] {
+        font-weight: bold;
+}
+.postblock {
+        color: black;
+        border-width: 1px;
+        border-radius: 0.25em;
+        -moz-border-radius: 0.25em;
+        background-color: #a9a8a6;
+        font-weight: bold;
+}
+
+.footer {
+        text-align: center;
+        font-size: 0.85em;
+}
+
+.unkfunc {
+        color: #7e6a4a;
+}
+.filesize {
+        text-decoration: none;
+}
+.filetitle, .replytitle {
+        background: inherit;
+        font-size: 1.2em;
+        color: #9f1c43;
+        font-weight: bold;
+}
+.postername, .commentpostername {
+        color: #32750d;
+        font-weight: bold;
+}
+.postertrip {
+        color: #32750d;
+}
+.oldpost { /* Marked for deletion (old) ? */
+        color: #CC1105;
+        font-weight: bold;
+}
+.omittedposts {
+        color: #656462;
+}
+.doubledash {
+        vertical-align: top;
+        clear: both;
+        float: left;
+        color: #656462;
+        font-size: 0.85em;
+}
+.thumbnailmsg {
+        font-size: 0.85em;
+        color: #656462;
+}
+
+.abbrev { /* dunno */
+        color: #707070;
+}
+
+.highlight {
+        background: #D0CDD6;
+        color: #150B0C;
+        border: 2px dashed #D0CDD6;
+}
+
+table {
+        border-collapse: collapse;
+        border-color: #84cdfd;
+        background-color: #ededeb;
+}
+form table, table#oldthreadlist {
+        border-collapse: separate;
+        background-color: inherit;
+}

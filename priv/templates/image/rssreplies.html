@@ -1,0 +1,70 @@
+<%!
+import mimetypes, os.path
+import extutil
+from matsuba.config import PRIVATE_FSPATH # ARGHH
+import matsuba.templatetools as tt
+
+# mimetypes' static interface is broken
+mime = mimetypes.MimeTypes([os.path.join(PRIVATE_FSPATH, 'mime.types')])
+def mime_type(filename):
+        return mime.guess_type(filename)[0] or 'application/octet-stream'
+%>
+<%page expression_filter="x" />
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel><title>${board.title}</title><link>${url(board=board, relative=False)}</link>
+<atom:link href="${url(board=board, path='rss.xml', relative=False)|upath}" rel="self" type="application/rss+xml" />
+<% posts = list(threads.posts(RSS_REPLIES)) %>
+% if len(posts):
+<atom:updated>${extutil.format_timestamp(posts[0].time, 'rfc3339', gmt=True)}</atom:updated>
+% endif
+<description>Last ${RSS_REPLIES} posts from ${board.title} at ${SITE_TITLE}.</description>
+% for post in posts:
+<% abslink = upath(url(post=post, relative=False)) %>
+<item>
+        <title>No.${post.thread.id}/${post.resid}${(': ' + post.subject if post.subject else '')}</title>
+        <dc:creator>${tt.format_name_trip(post.name_trip, ['', ''], ['', ''])} \
+        % if link and not link.startswith('#'):
+        &lt;${link}&gt;\
+        % endif
+        </dc:creator>
+        <link>${abslink}</link><guid>${abslink}</guid><comments>${abslink}</comments>
+        <pubDate>${extutil.format_timestamp(post.time, 'http', gmt=True)}</pubDate>
+% if post.filename:
+        <enclosure url="${url(board=board, src=post.filename, relative=False)|n,upath}"
+                length="${post.filesize}" type="${mime_type(post.filename)}" />
+% endif
+        <description><![CDATA[
+% if post.filename or post.thumbnail:
+        <p><small>
+        ## just show the image dimensions, original filename or other info if it exists, and thumbnail if it's
+        ## *not* a stock thumbnail. there's no point in putting all the other data here since it is already
+        ## represented in some other form.
+        <%
+        # the post object builds .fileinfo similarly, but some of its data is redundant here
+        i = []
+        if post.width or post.height:
+                i.append('%dx%d' % (post.width, post.height))
+        if post.extrainfo:
+                i.append(post.extrainfo)
+        %>
+        % if i:
+                File: ${', '.join(i)}<br />
+        % endif
+        % if post.thumbnail and not post.thumbnail.startswith('/'):
+                <img src="${url(board=board, thumb=post.thumbnail, relative=False)|upath}" alt="${post.sizeinfo}"
+                        width="${post.tn_width}" height="${post.tn_height}" />
+        % endif
+        </small></p>
+% endif
+        <% abbrev = extutil.abbreviate_html(post.message) %>
+        ${abbrev or post.message|n}
+% if abbrev:
+        <p><small>Comment too long; full version <a href="${abslink}">here</a>.</small></p>
+% endif
+        ]]></description>
+</item>
+% endfor
+</channel></rss>

@@ -1,0 +1,14 @@
+<%inherit file="base.html" />
+
+<div class="postarea">
+<form id="reply" action="${MATSUBA_PATH|upath,h}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="task" value="rebuild" />
+
+<p>
+% for n, t in sorted(user.get_authorized_boards()):
+<label><input type="checkbox" name="board" value="${n|h}"> /${n|h}/ - ${t|h}</label><br />
+% endfor
+<input type="submit" value="Rebuild selected boards" />
+</p>
+</form>
+</div>

@@ -1,0 +1,141 @@
+/* Wakaba-tweaked version of /rnd/ stylesheet on 573chan. */
+
+html, body{
+        background-color: #ED93BE;
+        color: #4E203A;
+        font-family: "Trebuchet MS",Trebuchet,serif;
+}
+a {
+        color: #FFFFFF;
+}
+a:hover {
+        color: #0066ff;
+}
+.adminbar {
+        text-align:right;
+        float:right;
+        font-size: 0.8em;
+}
+.adminbar a {
+        font-weight: bold;
+}
+.logo {
+        clear:both;
+        text-align:center;
+        font-size:2em;
+        color:#800000;
+}
+.theader{
+        background:#E9ACC8;
+        color:#B06A8B;
+        border: solid 1px #B06A8B;
+        text-align:center;
+        padding:2px;
+        clear: both;
+        font-weight: bold;
+        margin-bottom: .5em;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+}
+.rules {
+        font-size:0.7em;
+}
+.postblock {
+        background:transparent;
+        color: #002244;
+        font-weight: bold;
+}
+.footer {
+        text-align: center;
+        font-size: 12px;
+        font-family:serif;
+        margin:2em 0 0 0;
+}
+.unkfunc {
+        background:inherit;
+        color:#789922;
+}
+.reflink {
+        color:#4E203A;
+        font-size: 0.8em;
+        font-weight: bold;
+}
+.filesize {
+        text-decoration:none;
+        color: #B06A8B;
+        font-size: .8em;
+}
+.filetitle, .replytitle {
+        background:inherit;
+        font-size:1.2em;
+        color:#002244;
+        font-weight: bold;
+}
+.postername {
+        font-weight: bold;
+        color:#FFFFFF;
+}
+.postertrip {
+        color:#FF3300;
+}
+.omittedposts {
+        color:#B06A8B;
+}
+.reply{
+        background:#E9ACC8;
+        border: solid 1px #B06A8B;
+        padding: 0;
+        margin: 0;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+}
+blockquote {
+        margin: .5em .5em .5em .5em;
+}
+blockquote p {
+        margin: 0;
+        padding: 0;
+}
+.reply blockquote {
+        margin: .5em;
+}
+.doubledash {
+        display: none;
+        vertical-align:top;
+        clear:both;
+        float:left;
+}
+.replytitle {
+        font-size: 1.2em;
+        color:#002244;
+        font-weight:bold;
+}
+.commentpostername {
+        color:#004A99;
+        font-weight:800;
+}
+.thumbnailmsg {
+        font-size: .8em;
+        color:#B06A8B;
+}
+hr {
+        border-style: solid none none none;
+        border-width: 1px;
+        border-color: #810A1D;
+}
+table {
+        border-style: none;
+}
+
+.abbrev {
+        color:#B06A8B;
+}
+.highlight {
+        background:#EEDACB;
+        color: #4E203A;
+        border: 2px dashed #EE6600;
+}
+
+input, textarea {
+        background-color: #E9ACC8;
+}

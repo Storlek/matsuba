@@ -1,0 +1,55 @@
+<%!
+import posixpath, cgi
+import matsuba.templatetools as tt
+import extutil
+%>
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">catalogpage</%def>
+<%def name="pagetitle()">Catalog Mode</%def>
+[<a href="${url(board=board)|upath,h}">Return</a>]
+<div class="theader">Catalog Mode</div>
+
+
+## <!--CatalogHeader-->
+<table id="catalog" border="1px"><tbody>
+## <!--/CatalogHeader-->
+<% col = row = 0 %>
+% for thread in threads:
+        <%
+        # UGHH
+        alttext = extutil.strip_html((cgi.escape(thread[0].subject) or thread[0].message
+                or cgi.escape(thread[0].basename or '') or 'No.%d' % thread.id), 16).strip()
+        # hack to make it 4 full / 8 half width chars max.
+        alttext = alttext[:len(alttext.encode('sjis', 'replace')[:8].decode('sjis', 'ignore'))]
+        fc = tt.filecount(thread)
+        %>
+        % if col == 0:
+        <tr>
+        % endif
+        ## <!--CatalogThread-->
+        ## CAREFUL! weird tag splitting is necessary here to keep everything clean in the rendered html
+        <td style="font-size: 75%"><a href="${url(thread=thread)|upath,h}"
+        % if thread[0].catnail:
+        ><img src="${url(board=board, cat=thread[0].catnail)|upath,h}"
+                width="${thread[0].cat_width}" height="${thread[0].cat_height}"
+                alt="${alttext|h}" /></a>
+        % else:
+        >${alttext|h}</a>
+        % endif
+        <br />${thread.length}${('/%d' % fc if fc else '')}${('&nbsp;' + sticky_icon() if thread.sticky else '')}</td>
+        ## <!--/CatalogThread-->
+        <% col = (col + 1) % CATALOG_COLUMNS %>
+        % if col == 0:
+        </tr>
+        % endif
+% endfor
+% if col and len(threads) > CATALOG_COLUMNS:
+<td colspan="${CATALOG_COLUMNS - col}"></td></tr>
+% elif col:
+</tr>
+% endif
+## <!--CatalogFooter-->
+</tbody></table><hr />
+## <!--/CatalogFooter-->

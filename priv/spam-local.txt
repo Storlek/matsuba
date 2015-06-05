@@ -1,0 +1,2 @@
+# Put your own spam here.
+# (this way, spam.txt can be kept in sync with wakaba)

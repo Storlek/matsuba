@@ -1,0 +1,70 @@
+<%!
+import os.path, glob, codecs
+from matsuba import config
+uopen = lambda fn: codecs.open(fn, 'r', 'utf-8', 'replace')
+
+JS_VERSION = '3'
+DEFAULT_STYLESHEET = 'Futaba'
+STYLESHEETS = ['Burichan', 'Futaba', 'Gurochan', 'Photon']
+# Accessible via javascript and cookies, but not in the clickable selectors
+# Collected from various imageboards around the net.
+HIDDEN_STYLESHEETS = [
+        '420chan', '573', 'Creator', 'Cuddle', 'Electric Blue',
+        'Fuhrerchan', 'Germany', 'Kusaba', 'Londerground',
+        'Not4chan', 'Transmission', 'Wiiabu',
+]
+%>
+
+<%def name="bodyclass()"></%def>
+<%def name="pagetitle()"></%def>
+
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="imageboard"><head><title>
+<% t = capture(self.pagetitle) %>
+% if t:
+${t|h} -
+% endif
+${board and board.title or SITE_TITLE|h}
+</title><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<link rel="shortcut icon" href="/favicon.ico" />
+% if board and RSS_REPLIES:
+<link rel="alternate" type="application/rss+xml" title="RSS feed" href="${url(board=board, path='rss.xml')|upath,h}" />
+% endif
+<link rel="stylesheet" type="text/css" href="${CSS_PATH|upath,h}/const.css" />
+<link rel="stylesheet" type="text/css" href="${CSS_PATH|upath,h}/pygments.css" />
+% for sname in STYLESHEETS + HIDDEN_STYLESHEETS:
+<link rel="${('stylesheet' if sname.lower() == DEFAULT_STYLESHEET.lower() else 'alternate stylesheet')}" type="text/css"
+        href="${CSS_PATH|upath,h}/img/${sname.replace(' ', '_').lower()|upath,h}.css" title="${sname|h}" />
+% endfor
+<script type="text/javascript" src="${JS_PATH|upath,h}/matsuba.js?v=${JS_VERSION}"></script>
+</head><body class="${self.bodyclass()}">
+<div class="boardbar">${BOARD_LIST}</div>
+<div class="adminbar">
+% for sname in STYLESHEETS:
+[<a href="javascript:set_stylesheet('${sname|h}')">${sname|h}</a>]
+% endfor
+- [<a href="${SITE_PATH|upath,h}/">Home</a>]
+% if board:
+        <form method="get" action="http://www.google.com/search">
+        <input type="hidden" name="as_dt" value="i" />
+        <input type="hidden" name="as_sitesearch" value="${url(board=board, path='res', relative=False)|upath,h}" />
+        <input type="text" name="as_q" value="" size="14" style="font-size: 0.8em" />
+        <input type="submit" value="Search" style="font-size: 0.8em" />
+        </form>
+% endif
+</div>
+<div class="logo">
+<% banner = get_random_banner(board) %>
+% if banner:
+<img width="300" height="100" alt="${('', SITE_TITLE)[bool(board)]|h}" src="${banner|upath,h}" /><br />
+% endif
+${board and board.title or SITE_TITLE|h}</div><hr />
+${next.body()}
+<p class="footer">
+- <a href="http://rigelseven.com/">matsuba</a>
++ <a href="http://wakaba.c3.cx/">wakaba</a>
++ <a href="http://www.2chan.net/">futaba</a>
+- </p></body></html>

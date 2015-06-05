@@ -1,0 +1,225 @@
+html, body {
+        background-color:#330000;
+        color:#d8d8d8;
+        font-family: "Trebuchet MS", Tahoma, Verdana, Arial, sans-serif;
+        font-size:10pt;
+}
+
+a {
+        text-decoration:none;
+        color:#f8c20f;
+}
+a:visited {
+
+        color:#f8c20f;
+}
+a:hover {
+        color:#784818;
+
+}
+a.quotelink {
+
+        color:#784818;
+}
+
+p {
+        text-align:left;
+        margin-top:2px;
+        margin-bottom: 10px;
+        padding: 2px;
+        list-style: none;
+}
+
+h1 {
+        color: #d8d8d8;
+        font-family:"Times New Roman", Helvetica, Arial;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 50px;
+        margin: 0px;
+        margin-bottom: 0px;
+}
+
+h2 {
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        text-align:center;
+        font-style:italic;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px 0px 0px 4px;
+}
+
+h3 {
+        font-size: small;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color: #333333;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        text-align: left;
+        padding: 0px 0px 0px 4px;
+        border-style: solid;
+        border-width: 1px;
+        border: 1px solid #000000;
+}
+
+h4 {
+        font-size: x-small;
+        text-align: left;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color:#333333;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px 0px 0px 4px;
+        border: 1px solid #000000;
+}
+
+hr {
+        border: none;
+        border-top: 1px solid #f8c20f;
+        height: 0px;
+}
+
+ul {
+        text-align:left;
+        list-style:disc;
+}
+
+li {
+        margin: 0px;
+        padding: 0px 0px 0px 2px;
+        line-height: 1.2em;
+}
+
+.logo {
+        clear:both;
+        text-align:center;
+
+        font-size:24pt;
+        color:#f8c20f;
+        width:100%;
+}
+
+input, textarea {
+        background-color: #333333;
+        color:#d8d8d8;
+        border: 1px solid #000000;
+}
+
+.postblock {
+        background-color: #333333;
+        border: 1px solid #000000;
+        color:#d8d8d8;
+        font-weight: bold;
+        padding: 2px 5px 2px 5px;
+        width:55px;
+}
+
+.unkfunc {
+        background:inherit;
+        color:#ff0000;
+}
+.filesize {
+        text-decoration:none;
+}
+.filetitle {
+
+        color:#f8c20f;
+        font-weight:800;
+}
+.postername {
+
+        font-size:11pt;
+        color:#f8c20f;
+        font-weight: bold;
+}
+.postertrip {
+
+        color:#f8c20f;
+}
+.oldpost {
+
+        color:#f8c20f;
+        font-weight:800;
+}
+.omittedposts {
+
+        color:#CC0000;
+}
+.reply {
+        background-color: #333333;
+        color:#d8d8d8;
+        border-style:solid;
+        border-color: #000000;
+        border-width: 0px 1px 1px 0px;
+}
+.replyhl {
+        background-color: #333333;
+        color:#d8d8d8;
+}
+.highlight {
+        background-color:#333333;
+        color:#d8d8d8;
+        border: 1px dashed #f8c20f;
+}
+.doubledash {
+        vertical-align:top;
+        clear:both;
+        float:left;
+}
+.replytitle {
+
+        font-size:18px;
+        color:#f8c20f;
+        font-weight:800;
+}
+.commentpostername {
+
+        font-size:11pt;
+        color:#f8c20f;
+        font-weight: bold;
+}
+a.quotejs {
+        color:#d8d8d8;
+        text-decoration: none;
+}
+a.quotejs:hover {
+        font-weight:bold;
+}
+
+.title {
+        font-size: small;
+        font-weight: bold;
+        font-family:Helvetica, Arial;
+        background-color: #333333;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        text-align: left;
+        padding: 0px 0px 0px 4px;
+        border: 1px solid #000000;
+}
+
+.content {
+        text-align:left;
+        margin-top:2px;
+        margin-bottom: 10px;
+        padding: 2px;
+        list-style: none;
+        background-color: #4d4d4d;
+        border: 1px solid #000000;
+}
+
+.top {
+        font-size:20px;
+        font-family:"Times New Roman", Helvetica, Arial;
+        font-weight:normal;
+        text-align:center;
+        width:75%;
+        position:absolute;
+        top:0px;
+        left:205px;
+        margin-top:5px;
+}

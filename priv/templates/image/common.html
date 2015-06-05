@@ -1,0 +1,234 @@
+## defs provided:
+##     pager(page, numpages) - [Prev] [0] [1] [2] [3] [Next]
+##     singlepost(post, threadpage) - one post
+##     rules(board, thread=None) - the rules underneath the posting form (used internally here)
+##     postform(board, thread=None) - the posting form
+## internal:
+##     post_name_label(post) - outputs a name (and link, if one is defined)
+##     post_timestamp_label(post, dateformat=None) - timestamp, with link if one is defined and no name is set.
+##         dateformat is passed to format_timestamp
+##     post_label(post, dateformat=None) - post subject, name, timestamp, and poster ID
+##     sticky_icon() - <img/> for a sticky icon
+##     post_message(post, threadpage=True) - message text of a post. if threadpage is False, long messages are
+##         abbreviated with a note to that effect.
+
+<%!
+import matsuba.templatetools as tt
+import extutil
+
+# True = index.html, 1.html, 2.html, etc.
+# False = only index.html
+THREADLIST_MULTIPAGE = True
+
+# True = Wakaba style:
+#     Posts increment globally
+#     Threads served via /board/res/threadid.html
+#     Post id references link to #postid on the thread page
+#     Threads are trimmed
+# False = Kareha style:
+#     Each thread has a post #1
+#     Threads are served via /board/read/postrange
+#     Post id references link to a single-post view
+#     Multiple-post ranges are supported in post references
+#     Threads are not trimmed
+POSTIDS_ABSOLUTE = True
+
+# True = a subject is required when posting a new thread
+# False = subject can be blank
+REQUIRE_SUBJECT = False
+
+# Other pages to generate (catalog, subback, ...)
+OTHER_PAGES = [('rssreplies', 'rss.xml'), ('catalog', 'catalog.html'), ('subback', 'subback.html')]
+
+%>
+
+## -------------------------------------------------------------------------------------------------------------
+## Page list.
+
+<%def name="pager(page, numpages)"><table border="1"><tbody><tr><td>
+% if page == 0:
+        Previous
+% else:
+        <form method="get" action="${(page - 1) or 'index'}.html"><input type="submit" value="Previous" /></form>
+% endif
+</td><td>
+## Google-style; trim to 20 pages at most, with current page in middle
+% for n in xrange(max(0, page - 10), min(numpages, page + 10)):
+        % if n == page:
+                [<strong>${n}</strong>]
+        % else:
+                [<a href="${n or 'index'}.html">${n}</a>]
+        % endif
+% endfor
+</td><td>
+% if page >= numpages - 1:
+        Next
+% else:
+        <form method="get" action="${page + 1}.html"><input type="submit" value="Next" /></form>
+% endif
+</td></tr></tbody></table></%def>
+
+## -------------------------------------------------------------------------------------------------------------
+## Single post.
+## vars:
+##     post = Post object
+##     threadpage = boolean. Affects post abbreviation, [Reply] link, and amount of file info shown
+
+<%def name="singlepost(post, threadpage)">
+% if post.id == post.thread.id:
+## First post
+        % if post.filename:
+                <span class="filesize">File:
+                <a href="${url(board=board, src=post.filename)|upath,h}">${post.short_basename|h}</a>
+                -<em>(${(post.fileinfo if threadpage else post.sizeinfo)|h})</em></span>
+                ## <span class="thumbnailmsg">Thumbnail displayed, click image for full size.</span>
+                <br /><a target="_blank" href="${url(board=board, src=post.filename)|upath,h}">
+        % endif
+        % if post.thumbnail:
+                <img src="${url(board=board, thumb=post.thumbnail)|upath,h}"
+                width="${post.tn_width}" height="${post.tn_height}" alt="${post.sizeinfo|h}" class="thumb" />
+        % endif
+        % if post.filename:
+                </a>
+        % endif
+        <a name="${post.id}"></a>
+        <label><input type="checkbox" name="delete" value="${post.id}" />${post_label(post)}</label>
+        <span class="reflink"><a href="${url(post=post)|upath,h}">No.</a><a
+        href="${url(post=post, quote=True)|upath,h}">${post.id}</a></span>
+        ${(sticky_icon() if post.sticky else '')}
+        % if not threadpage:
+        &nbsp; [<a href="${url(thread=post.thread)|upath,h}">Reply</a>]
+        % endif
+        ${post_message(post, threadpage)}
+% else:
+## Reply
+        <table><tbody><tr><td class="doubledash">&#8943;</td>
+        <td class="reply" id="reply${post.id}">
+        <a name="${post.id}"></a>
+        <label><input type="checkbox" name="delete" value="${post.id}" />${post_label(post)}</label>
+        ## TODO: javascript, see above
+        <span class="reflink"><a href="${url(post=post)|upath,h}">No.</a><a
+        href="${url(post=post, quote=True)|upath,h}">${post.id}</a></span>
+        % if post.filename or post.thumbnail:
+                <br />
+        % endif
+        % if post.filename:
+                <span class="filesize">File:
+                <a href="${url(board=board, src=post.filename)|upath,h}">${post.short_basename|h}</a>
+                -<em>(${(post.fileinfo if threadpage else post.sizeinfo)|h})</em></span>
+                ## <span class="thumbnailmsg">Thumbnail displayed, click image for full size.</span>
+                <br /><a target="_blank" href="${url(board=board, src=post.filename)|upath,h}">
+        % endif
+        % if post.thumbnail:
+                <img src="${url(board=board, thumb=post.thumbnail)|upath,h}" width="${post.tn_width}" height="${post.tn_height}"
+                alt="${post.sizeinfo|h}" class="thumb" />
+        % endif
+        % if post.filename:
+                </a>
+        % endif
+        ${post_message(post, threadpage)}
+        </td></tr></tbody></table>
+% endif
+</%def>
+
+## -------------------------------------------------------------------------------------------------------------
+## Rules.
+## vars:
+##     board = Board object
+##     thread = Thread object (if applicable)
+
+<%def name="rules(board, thread=None)"><ul>
+<li>Supported file types are: ${', '.join(board.all_filetypes(thread is not None)).upper()}</li>
+<li>Maximum file size allowed is ${board.max_filesize // 1024} KB.</li>
+% if set(['jpg', 'png', 'gif']).intersection(board.all_filetypes(thread is not None)):
+<li>Images greater than ${THUMBNAIL_SIZE[thread is not None]}x${THUMBNAIL_SIZE[thread is not None]} pixels will be thumbnailed.</li>
+% endif
+<li><a href="${url(board=board, path='subback.html')|upath,h}">Thread Index</a>
+        / <a href="${url(board=board, path='catalog.html')|upath,h}">Catalog Mode</a>
+</li>
+</ul></%def>
+
+## -------------------------------------------------------------------------------------------------------------
+## Posting form.
+## vars:
+##     board = Board object
+##     thread = Thread object (if applicable)
+
+<%def name="postform(board, thread=None)">
+<div class="postarea">
+<form id="reply" action="${MATSUBA_PATH|upath,h}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="board" value="${board.name}" />
+<input type="hidden" name="threadid" value="${(thread.id if thread else 0)}" />
+<div class="trap">Spam trap (don't touch):
+<input type="text" name="name" size="28" autocomplete="off" />
+<input type="text" name="link" size="28" autocomplete="off" value="'" />
+</div>
+<table><tbody>
+% if board.forced_anon:
+<input type="hidden" name="field1" />
+% else:
+<tr><td class="postblock">Name</td><td><input type="text" name="field1" size="28" maxlength="${MAX_FIELD_LENGTH}" /></td></tr>
+% endif
+<tr><td class="postblock">Link</td><td><input type="text" name="field2" size="28" maxlength="${MAX_FIELD_LENGTH}" /></td></tr>
+<tr><td class="postblock">Subject</td><td><input type="text" name="field3" size="35" maxlength="${MAX_FIELD_LENGTH}" />
+        <input type="submit" value="${('Reply' if thread else 'Create Thread')}" /></td></tr>
+<tr><td class="postblock">Comment</td><td id="commentbox"><textarea name="field4" cols="48" rows="4"></textarea></td></tr>
+% if board.all_filetypes(thread is not None):
+<tr><td class="postblock">File</td><td><input type="file" name="upload" size="35" /></td></tr>
+% endif
+% if caller and hasattr(caller, 'form_append'):
+${caller.form_append(board, thread)}
+% endif
+<tr><td colspan="2"><div class="rules">${rules(board, thread)}</div></td></tr>
+</tbody></table></form></div><hr />
+</%def>
+
+## -------------------------------------------------------------------------------------------------------------
+## misc little stuff
+
+## Just the name
+<%def name="post_name_label(post)">
+${tt.format_name_trip(post.name_trip, ['<span class="postername">', '</span>'], ['<span class="postertrip">', '</span>'], post.link)}
+</%def>
+
+## Just the timestamp
+<%def name="post_timestamp_label(post, dateformat=None)">
+% if post.link and not filter(None, post.name_trip):
+<a href="${post.link|upath,h}">${tt.timestamp(post, dateformat)}</a>
+% else:
+${tt.timestamp(post, dateformat)}
+% endif
+</%def>
+
+## All together now!
+<%def name="post_label(post, dateformat=None)">
+% if post.subject:
+<span class="filetitle">${post.subject|h}</span>
+% endif
+${post_name_label(post)}
+${post_timestamp_label(post, dateformat)}
+% if post.idcode:
+<span class="idcode">ID:${post.idcode|h}</span>
+% endif
+</%def>
+
+## Sticky icon
+<%def name="sticky_icon()">
+<img src="${IMG_PATH|upath,h}/sticky.png" width="16" height="16" alt="Sticky" title="Sticky" />
+</%def>
+
+## Post message, with abbreviation if not on a thread page
+<%def name="post_message(post, threadpage=True)"><%
+if threadpage:
+        abbrev = None
+else:
+        abbrev = extutil.abbreviate_html(post.message)
+%><blockquote>
+${abbrev or post.message}
+% if abbrev:
+## Kareha: Post too long. Click to view the <a>whole post</a> or the <a>thread page</a>.
+## Shiichan: <em>(<a>Post truncated.</a>)</em>
+<p class="abbrev">Comment too long. Click <a href="${url(post=post)|upath,h}">here</a>
+to view the full text.</p>
+% endif
+</blockquote></%def>

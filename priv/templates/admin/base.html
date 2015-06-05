@@ -1,0 +1,20 @@
+<%inherit file="/image/base.html" />
+
+<%def name="bodyclass()">adminpage</%def>
+<%def name="pagetitle()">Administration: ${header}</%def>
+
+% if user:
+% if returnlink:
+[<a href="${MATSUBA_PATH|upath,h}?task=menu">Admin Menu</a>
+/ <a href="${returnlink|upath,h}">Return</a>]
+% else:
+[<a href="${MATSUBA_PATH|upath,h}?task=menu">Admin Menu</a>]
+% endif
+[<a href="${MATSUBA_PATH|upath,h}?task=logout">Log Out</a>]
+- <span class="postername">${user.loginname|h}</span>
+<span class="postertrip">${user.cap}</span>
+% endif
+
+<div class="theader">Administration: ${header}</div>
+${next.body()}
+<hr />

@@ -1,0 +1,118 @@
+/* http://img.4chan.org/b/ - 03/28/07
+
+        r e v o l u t i o n !
+        create again we must
+        the /b/ we once knew
+
+Edited for Wakaba usage. */
+
+html, body {
+        background:#E8E5EE;
+        color:#150B0C;
+}
+a, a:visited {
+        color:#0000EE;
+}
+a:hover {
+        color:#DD0000;
+}
+.adminbar {
+        text-align:right;
+        float:right;
+}
+.logo {
+        clear: both;
+        text-align: center;
+        font-size: 2em;
+        color: #150B0C;
+        width: 100%;
+}
+.theader {
+        background:#D0CDD6;
+        color:#DD0000;
+        font-weight:800;
+        text-align:center;
+        padding:2px;
+        width:100%;
+}
+.rules {
+        font-size: 0.7em;
+}
+.postblock {
+        background: #D0CDD6;
+        color: #150B0C;
+        font-weight: 800;
+}
+.footer {
+        text-align: center;
+        font-size: 12px;
+        font-family: serif;
+}
+
+.unkfunc {
+        color: #789922;
+}
+.filesize {
+        text-decoration: none;
+}
+.filetitle {
+        background: inherit;
+        font-size: 1.2em;
+        color: #FA1B48;
+        font-weight: 800;
+}
+.postername {
+        color: #FA1B48;
+        font-weight: 800;
+}
+.postertrip {
+        color: #FA1B48;
+}
+.oldpost {
+        color:#CC1105;
+        font-weight:800;
+}
+.omittedposts {
+        color: #150B0C;
+}
+.reply {
+        background: #D0CDD6;
+        color: #150B0C;
+}
+.doubledash {
+        vertical-align: top;
+        clear: both;
+        float: left;
+}
+.replytitle {
+        font-size: 1.2em;
+        color: #FA1B48;
+        font-weight: 800;
+}
+.commentpostername {
+        color: #FA1B48;
+        font-weight: 800;
+}
+.thumbnailmsg {
+        font-size: small;
+        color:#150B06;
+}
+
+.abbrev {
+        color:#707070;
+}
+
+.highlight {
+        background: #D0CDD6;
+        color: #150B0C;
+        border: 2px dashed #D0CDD6;
+}
+
+.boardbar {
+        float: left;
+}
+
+.adminbar {
+        display: block;
+        text-align: right;
+}

@@ -1,0 +1,22 @@
+<%inherit file="base.html" />
+
+<div class="postarea">
+<form id="reply" action="${MATSUBA_PATH|upath,h}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="task" value="delpost" />
+<table><tbody>
+<tr><td class="postblock">Board</td>
+<td><select name="board">
+% for n, t in sorted(user.get_authorized_boards()):
+<option value="${n|h}" ${board and n == board.name and ' selected="selected"' or ''}>/${n|h}/ - ${t|h}</option>
+% endfor
+</select></td></tr>
+<tr><td class="postblock">Ban</td>
+<td><label> <input type="checkbox" name="ban" /> Ban poster:</label>
+<input type="text" name="banreason" size="23" value="spam" /></td></tr>
+<td class="postblock">Post</td>
+<td>&gt;&gt;<input type="text" name="ref" size="8" />
+<input type="submit" value="Delete" /></td></tr>
+</tbody></table>
+</form>
+
+</div>

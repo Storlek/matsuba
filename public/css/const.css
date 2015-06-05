@@ -1,0 +1,42 @@
+body { margin: 0; padding: 8px; margin-bottom: auto; }
+blockquote blockquote { margin-left: 0em }
+form { margin-bottom: 0px }
+form .trap { display:none }
+.postarea { text-align: center }
+.postarea table { margin: 0px auto; text-align: left }
+.thumb { border: none; float: left; margin: 2px 20px }
+.reply blockquote, blockquote :last-child { margin-bottom: 0em }
+.reflink a { color: inherit; text-decoration: none }
+.reply .filesize { margin-left: 20px }
+.userdelete { float: right; white-space: nowrap }
+.replypage .replylink { display: none }
+.admin { color: red }
+.mod { color: purple }
+.boardbar, .adminbar { font-size: small }
+.boardbar { text-align: left; float: left }
+.adminbar { text-align: right; float: right }
+/* a .postername, a .commentpostername { color: inherit; } - do this if putting link outside of name/trip spans (more like 4chan) */
+label a[href*="sage"], h3 a[href*="sage"] {
+        color: inherit;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        -khtml-opacity: 0.5;
+        filter:alpha(opacity=50);
+}
+
+#oldthreadlist { width: 100% }
+#catalog { margin-left: auto; margin-right: auto;}
+#catalog td { font-size: 0.6em; }
+#catalog img { border: 0 none }
+.spoiler { color: black; background-color: black; }
+.spoiler:hover { color: white; background-color: black; }
+.aa { text-align: left; font-family: IPAMonaPGothic, Mona, 'MS PGothic', YOzFontAA97 !important; }
+
+#commentbox a { text-decoration: none; color: inherit; }
+#commentbox a { visibility: hidden; }
+#commentbox:hover a { visibility: visible; }
+#commentbox textarea:focus + a, #commentbox textarea:focus + a + a { visibility: visible; }
+* html #commentbox a { visibility: visible; } /* always visible in broken browsers */
+
+.metadata { font-size: smaller; }
+ul.metadata { list-style: none; margin-left: 0; padding-left: 1em; text-indent: -1em; }

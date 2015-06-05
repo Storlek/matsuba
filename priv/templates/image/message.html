@@ -1,0 +1,16 @@
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">errorpage</%def>
+<%def name="pagetitle()">${header}</%def>
+% if returnlink:
+[<a href="${returnlink|upath,h}">Return</a>]
+% endif
+% if header:
+<div class="theader">${header}</div>
+%endif
+% if raw:
+${message}
+% else:
+<p>${message}</p>
+% endif
+<hr />

@@ -1,0 +1,13 @@
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">errorpage</%def>
+
+% if header:
+<h1>${header|h}</h1>
+% endif
+
+% if raw:
+${message}
+% else:
+<p>${message}</p>
+% endif

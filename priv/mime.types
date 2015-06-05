@@ -1,0 +1,9 @@
+# MIME type                     Extensions
+audio/mp4			aac m4a
+audio/x-ms-wma			wma
+application/ogg			ogg
+audio/x-mod			it s3m xm mod
+video/mp4			mp4
+video/flv			flv
+video/x-ms-wmv			wmv
+application/x-bittorrent	torrent

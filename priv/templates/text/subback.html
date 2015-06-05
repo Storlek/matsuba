@@ -1,0 +1,42 @@
+<%!
+import matsuba.templatetools as tt
+import extutil
+import cgi
+%>
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">backlogpage</%def>
+
+
+<div id="navigation">
+<strong>Navigation:</strong>
+<a href="${url(board=board)|upath,h}">Return</a>
+</div>
+
+<div id="threads">
+<h1>${board.title}</h1>
+<table id="oldthreadlist"><thead><tr class="head">
+<th>Num</th><th>Title</th><th>Posts</th><th>Last post</th><th>File size</th>
+</tr></thead><tbody>
+
+% for n, thread in enumerate(threads):
+<tr class="line${~n & 1}">
+<td align="right">${n + 1}:</td>
+<td><a href="${url(thread=thread)|upath,h}" rel="nofollow">
+% if thread.subject:
+${thread.subject|h}
+% elif thread[0].message:
+${extutil.strip_html(thread[0].message, 50)|h}
+% elif thread[0].extrainfo:
+${thread[0].extrainfo.split(',')[0]|h}
+% endif
+</a></td>
+<td align="right"><a href="${url(thread=thread,postrange='')|upath,h}">${thread.length}</a></td>
+<td>${extutil.format_timestamp(thread[-1].time, '2ch')}</td>
+<td align="right">${extutil.format_filesize(thread.get_text_size())}</td>
+</tr>
+% endfor
+
+</tbody></table>
+</div>

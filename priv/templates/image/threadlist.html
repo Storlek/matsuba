@@ -1,0 +1,52 @@
+<%!
+import matsuba.templatetools as tt
+import extutil
+%>
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">mainpage</%def>
+
+${postform(board)}
+
+<form id="delform" action="${MATSUBA_PATH|upath,h}" method="post">
+<input type="hidden" name="board" value="${board.name}" />
+
+% for thread in threads:
+        <%
+        op, res = thread[0], thread[1:]
+        if thread.sticky:
+                n = MAX_STICKY_REPLIES_SHOWN
+        else:
+                n = MAX_REPLIES_SHOWN
+        replies = res[-n:]
+        omitted = len(res) - len(replies)
+        omitted_files = tt.filecount(res) - tt.filecount(replies)
+
+        %>
+        ${singlepost(op, threadpage)}
+        % if omitted:
+                <span class="omittedposts">${extutil.make_plural(omitted, 'post')}
+                % if omitted_files:
+                        and ${extutil.make_plural(omitted_files, 'file')}
+                % endif
+                omitted${(' (permasaged)' if thread.sage else '')}. Click Reply to view.</span>
+        % endif
+        % for post in replies:
+                ${singlepost(post, threadpage)}
+        % endfor
+
+        <br style="clear: left" /><hr />
+% endfor
+
+<table class="userdelete"><tbody><tr><td>
+% if board.all_filetypes():
+[<label><input type="checkbox" name="fileonly" />File Only</label>]
+% endif
+<input value="Delete" type="submit" /></td></tr></tbody></table>
+</form>
+% if numpages:
+        ${pager(page, numpages)}
+% endif
+
+<br clear="all" />

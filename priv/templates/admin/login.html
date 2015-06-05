@@ -1,0 +1,12 @@
+<%inherit file="base.html" />
+
+<div class="postarea">
+<form id="reply" action="${MATSUBA_PATH|upath,h}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="task" value="menu" />
+<table><tbody>
+<tr><td class="postblock">Name</td><td><input type="text" name="login" size="28" /></td></tr>
+<tr><td class="postblock">Password</td><td><input type="password" name="password" size="28" />
+<input type="submit" value="Login" /></td></tr>
+</tbody></table>
+</form>
+</div>

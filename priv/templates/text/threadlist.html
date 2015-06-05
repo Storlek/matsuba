@@ -1,0 +1,113 @@
+<%!
+import matsuba.templatetools as tt
+import extutil
+
+THREADS_VISIBLE, THREADS_LISTED = 10, 40
+%>
+<%namespace file="common.html" import="*" />
+<%inherit file="base.html" />
+
+<%def name="bodyclass()">mainpage</%def>
+
+<% banner = get_random_banner(board) %>
+% if banner:
+<div style="clear: both; text-align: center; margin-bottom: 1em"><img
+        width="300" height="100" alt="${SITE_TITLE|h}"
+        src="${banner|upath,h}" /></div>
+% endif
+## header.html goes here
+
+## <!-- Main page template -->
+<div id="titlebox" class="outerbox"><div class="innerbox">
+<h1>${board and board.title or SITE_TITLE|h}</h1>
+<div class="threadnavigation">
+<a href="#menu" title="Jump to thread list">&#9632;</a>
+<a href="#1" title="Jump to next thread">&#9660;</a>
+</div><div id="rules">
+## rules.html goes here
+</div></div></div>
+
+<div id="stylebox" class="outerbox"><div class="innerbox">
+<strong>Board look:</strong>
+% for sname in self.STYLESHEETS:
+        <a href="javascript:set_stylesheet('${sname|h}')">${sname|h}</a>
+% endfor
+% if BOARD_LIST:
+<br /><strong>Site:</strong> ${BOARD_LIST}
+% endif
+</div></div>
+
+
+<a name="menu"></a>
+
+## <div class="outerbox"><div class="innerbox">mid.html goes here!</div></div>
+
+<div id="threadbox" class="outerbox"><div class="innerbox">
+<div id="threadlist">
+% for n, thread in enumerate(threads[:THREADS_VISIBLE]):
+        <span class="threadlink"><a href="${url(thread=thread)|upath,h}" rel="nofollow"
+                >${n+1}: </a><a href="#${n+1}">${thread.subject|h} (${thread.length})</a></span>
+% endfor
+% for n, thread in enumerate(threads[THREADS_VISIBLE:THREADS_LISTED]):
+        <small class="threadlink"><a href="${url(thread=thread)|upath,h}" rel="nofollow"
+                >${n+1+THREADS_VISIBLE}: ${thread.subject|h} (${thread.length})</a></small>
+% endfor
+</div><div id="threadlinks">
+
+<a href="${url(board=board)|upath,h}#newthread">New thread</a> <a href="${url(board=board, path='subback.html')|upath,h}">All threads</a>
+</div></div></div>
+
+<div id="posts">
+% for tn, thread in enumerate(threads[:THREADS_VISIBLE]):
+<%
+op, res = thread[0], thread[1:]
+if thread.sticky:
+        n = MAX_STICKY_REPLIES_SHOWN
+else:
+        n = MAX_REPLIES_SHOWN
+replies = res[-n:]
+omitted = len(res) - len(replies)
+omitted_files = tt.filecount(res) - tt.filecount(replies)
+# extutil.make_plural(omitted_files, 'file')
+
+%>
+        <div class="${('sage' if thread.sage else '')}thread">
+        <a name="${tn+1}"></a>
+
+        <div class="threadnavigation">
+        <a href="#menu" title="Jump to thread list">&#9632;</a>
+        <a href="#${(tn + THREADS_VISIBLE - 1) % THREADS_VISIBLE + 1}" title="Jump to previous thread">&#9650;</a>
+        <a href="#${(tn + 1) % THREADS_VISIBLE + 1}" title="Jump to next thread">&#9660;</a>
+        </div>
+
+        <h2><a href="${url(thread=thread)|upath,h}" rel="nofollow">${thread.subject|h}
+                <small>(${thread.length}${(', sticky' if thread.sticky else '')}${(', permasaged' if thread.sage and not thread.sticky else '')}${(', closed' if thread.closed else '')})</small></a>
+        </h2>
+
+
+        <div class="replies"><div class="${('firstreply' if omitted else 'allreplies')}">
+        ${singlepost(op, False)}
+        % if omitted:
+        </div><div class="repliesomitted"></div><div class="finalreplies">
+        % endif
+        % for post in replies:
+        ${singlepost(post, False)}
+        % endfor
+        </div></div>
+
+        <%call expr="postform(board, thread)"><%def name="links()"><div class="threadlinks">
+                <a href="${url(thread=thread, postrange='')|upath,h}">Entire thread</a>
+                <a href="${url(thread=thread, postrange='l50')|upath,h}" rel="nofollow">Last 50 posts</a>
+                <a href="${url(thread=thread, postrange='-100')|upath,h}" rel="nofollow">First 100 posts</a>
+                <a href="#menu">Thread list</a>
+        </div></%def></%call>
+
+        </div>
+% endfor
+</div>
+
+<a name="newthread"></a>
+<div id="createbox" class="outerbox"><div class="innerbox">
+<h2>New thread</h2>
+${postform(board)}
+</div></div>

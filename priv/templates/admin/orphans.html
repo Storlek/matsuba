@@ -1,0 +1,37 @@
+<%inherit file="base.html" />
+
+% if orphans:
+
+<form id="reply" action="${MATSUBA_PATH|upath,h}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="task" value="orphans" />
+<input type="hidden" name="action" value="delete" />
+<input type="submit" value="Delete orphaned files" />
+</form>
+
+% for board, in_db, in_fs in orphans:
+<h3>/${board.name}/ - ${board.title|h}</h3>
+<pre><code>
+% if in_db:
+        <strong>In database but missing from disk:</strong>
+        % for filename, postid in in_db:
+                <a href="${url(board=board, postid=postid)|upath,h}">&gt;&gt;${postid}</a>: ${filename|h}
+        % endfor
+% endif
+% if in_db and in_fs:
+<br />
+% endif
+% if in_fs:
+        <strong>Not referenced in database:</strong>
+        % for filename in in_fs:
+                ## wrong way to make a link is wrong
+                <a href="/${board.name}/${filename|upath,h}">${filename|h}</a>
+        % endfor
+% endif
+</code></pre>
+% endfor
+
+% else:
+
+<p>No orphaned files found.</p>
+
+% endif
